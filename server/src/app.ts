@@ -9,7 +9,13 @@ import { Accusation, Evidence, Mystery, Solution, Suspect } from './models.js';
 import { generateCase } from './generator.js';
 
 export const app=express();
-app.use(helmet()); app.use(cors({origin:process.env.CLIENT_ORIGIN||'http://localhost:5173'})); app.use(express.json({limit:'32kb'}));
+app.disable('x-powered-by');
+// Render terminates TLS and forwards the original request through one proxy hop.
+if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
+const allowedOrigins=(process.env.CLIENT_ORIGIN||(process.env.NODE_ENV==='production'?'':'http://localhost:5173')).split(',').map(origin=>origin.trim()).filter(Boolean);
+app.use(helmet());
+app.use(cors({origin(origin,callback){if(!origin||allowedOrigins.includes(origin))return callback(null,true);return callback(null,false);}}));
+app.use(express.json({limit:'32kb'}));
 app.use('/api/v1',rateLimit({windowMs:60_000,limit:40,standardHeaders:true,legacyHeaders:false}));
 const asyncRoute=(fn:(req:Request,res:Response,next:NextFunction)=>Promise<unknown>)=>(req:Request,res:Response,next:NextFunction)=>{void fn(req,res,next).catch(next)};
 const ok=(res:Response,data:unknown,status=200)=>res.status(status).json({success:true,data});

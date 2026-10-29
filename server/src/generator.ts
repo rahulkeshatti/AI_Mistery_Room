@@ -26,7 +26,7 @@ export async function generateCase(input: {scenario:string;title?:string;genre:s
   let last: unknown;
   for(let attempt=0;attempt<3;attempt++) {
     try {
-      const response=await ai.models.generateContent({model:process.env.GEMINI_MODEL||'gemini-2.0-flash',contents:prompt,config:{responseMimeType:'application/json',temperature:0.7}});
+      const response=await ai.models.generateContent({model:process.env.GEMINI_MODEL||'gemini-3.8-flash',contents:prompt,config:{responseMimeType:'application/json',temperature:0.7}});
       const parsed=caseSchema.parse(JSON.parse(response.text||'{}'));
       const suspectKeys=new Set(parsed.suspects.map(s=>s.suspectKey)), evidenceKeys=new Set(parsed.evidence.map(e=>e.evidenceKey));
       if(new Set([...suspectKeys]).size!==parsed.suspects.length||new Set([...evidenceKeys]).size!==parsed.evidence.length||!suspectKeys.has(parsed.solution.culpritSuspectKey)) throw new Error('Duplicate identifiers or missing culprit reference.');

@@ -20,3 +20,7 @@ See [server/.env.example](server/.env.example) and [client/.env.example](client/
 The API is versioned at `/api/v1`; the health route is `/api/v1/health`. Mystery creation returns an ID immediately; poll the status endpoint, load the overview/suspects/evidence, and post an accusation to unlock that session's reveal.
 
 All content is fictional and intended for a game. No real person, records, messaging account, or surveillance feed is involved.
+
+## Production deployment
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the GitHub → Vercel + Render + MongoDB Atlas walkthrough. The repository includes `render.yaml` and the Vercel SPA rewrite configuration.
