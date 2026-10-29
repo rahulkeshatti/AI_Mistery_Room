@@ -1,0 +1,6 @@
+const base=import.meta.env.VITE_API_BASE_URL||'http://localhost:5000/api/v1';
+export async function api<T>(path:string,init?:RequestInit):Promise<T>{const response=await fetch(`${base}${path}`,{...init,headers:{'Content-Type':'application/json',...init?.headers}});const json=await response.json();if(!response.ok)throw new Error(json.error?.message||'Request failed');return json.data as T;}
+export type Mystery={mysteryId:string;title:string;summary:string;scenario:string;genre:string;difficulty:string;status:string;suspectCount:number;evidenceCount:number};
+export type Suspect={suspectKey:string;name:string;age:number;occupation:string;relationshipToIncident:string;background:string;publicMotive:string;alibi:string};
+export type Evidence={id:string;evidenceKey:string;title:string;type:string;description:string;content?:Record<string,any>;occurredAt?:string;location?:string;relatedSuspectKeys:string[]};
+export type Verdict={isCorrect:boolean;selectedSuspectKey:string;culprit:string;solution:{motive:string;method:string;opportunity:string;incidentSummary:string;fullReveal:string;timeline:{time:string;event:string}[];deductions:{explanation:string;supportingEvidenceKeys:string[]}[];redHerringExplanations:{explanation:string;relatedEvidenceKeys:string[]}[]}};
