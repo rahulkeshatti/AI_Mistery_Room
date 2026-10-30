@@ -34,7 +34,7 @@ The first deployment may show API errors until the API is configured. That's exp
 
 ## 4. Deploy the API to Render
 
-1. In Render, select **New → Blueprint** and connect the same GitHub repository. Render reads the root `render.yaml` file and prepares the API web service.
+1. In Render, select **New → Blueprint** and connect the same GitHub repository. Render reads the root `render.yaml` file and prepares the API web service on its Free compute plan.
 2. Add the required secret values when prompted, or open the service's **Environment** page and set:
 
    - `MONGODB_URI`: the Atlas application connection string from step 2.
@@ -68,3 +68,4 @@ The first deployment may show API errors until the API is configured. That's exp
 - Keep only one API instance while using the current in-process case-generation task runner. Moving to multiple instances should include a durable job queue/worker lock to prevent duplicate generation.
 - Add custom domains only after the default domains work. If you change the frontend domain, update `CLIENT_ORIGIN`; if you change the API domain, update and redeploy `VITE_API_BASE_URL`.
 - Free service plans may sleep when idle and can have other plan-specific limits. Review the hosting providers' current plan details before relying on the app for continuous availability.
+- The Render Blueprint explicitly selects the Free compute plan to avoid silently choosing a paid instance. Free web services can sleep after 15 minutes without inbound traffic and may take about a minute to wake. Upgrade the service in Render only if you decide you need continuous availability.
