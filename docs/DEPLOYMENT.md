@@ -35,6 +35,7 @@ The first deployment may show API errors until the API is configured. That's exp
 ## 4. Deploy the API to Render
 
 1. In Render, select **New → Blueprint** and connect the same GitHub repository. Render reads the root `render.yaml` file and prepares the API web service on its Free compute plan for a public demo.
+   - The Blueprint build command installs development dependencies for TypeScript compilation, builds the server, then prunes development-only dependencies from the runtime install.
 2. Add the required secret values when prompted, or open the service's **Environment** page and set:
 
    - `MONGODB_URI`: the Atlas application connection string from step 2.
@@ -42,7 +43,7 @@ The first deployment may show API errors until the API is configured. That's exp
    - `GEMINI_API_KEY`: your Gemini API key. This is optional; without it, the API uses the built-in demo case generator.
 
 3. Keep `GEMINI_MODEL` set to `gemini-3.8-flash` or choose a currently supported model available to your API key. Google currently recommends its newer Flash models for new projects; model availability can change.
-4. Deploy. The Blueprint runs `npm ci && npm run build -w server`, then `npm run start -w server`. It uses `/api/v1/health` as the health check.
+4. Deploy. The Blueprint runs `npm ci --include=dev && npm run build -w server && npm prune --omit=dev`, then `npm run start -w server`. It uses `/api/v1/health` as the health check.
 5. Open the Render service URL and check `https://YOUR-API.onrender.com/api/v1/health`. A healthy service returns JSON with `status: "ok"`.
 
 ## 5. Connect the frontend to the API
