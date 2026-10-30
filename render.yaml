@@ -2,7 +2,7 @@ services:
   - type: web
     name: ai-mystery-room-api
     runtime: node
-    plan: free
+    plan: 0.5c-512mb
     buildCommand: npm ci && npm run build -w server
     startCommand: npm run start -w server
     healthCheckPath: /api/v1/health
