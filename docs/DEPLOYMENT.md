@@ -34,7 +34,7 @@ The first deployment may show API errors until the API is configured. That's exp
 
 ## 4. Deploy the API to Render
 
-1. In Render, select **New → Blueprint** and connect the same GitHub repository. Render reads the root `render.yaml` file and prepares the API web service on the smallest always-on paid compute plan (`0.5c-512mb`). Review the current price in Render before confirming creation.
+1. In Render, select **New → Blueprint** and connect the same GitHub repository. Render reads the root `render.yaml` file and prepares the API web service on its Free compute plan for a public demo.
 2. Add the required secret values when prompted, or open the service's **Environment** page and set:
 
    - `MONGODB_URI`: the Atlas application connection string from step 2.
@@ -67,4 +67,4 @@ The first deployment may show API errors until the API is configured. That's exp
 - Render sets `PORT` for web services; the server binds to `0.0.0.0` and handles `SIGTERM` for deploy shutdowns.
 - Keep only one API instance while using the current in-process case-generation task runner. Moving to multiple instances should include a durable job queue/worker lock to prevent duplicate generation.
 - Add custom domains only after the default domains work. If you change the frontend domain, update `CLIENT_ORIGIN`; if you change the API domain, update and redeploy `VITE_API_BASE_URL`.
-- The Render Blueprint selects a paid always-on service plan for production. Review Render's current price and any workspace usage charges before confirming the service. The API is configured for one instance; high availability across multiple instances would require adding a durable generation queue and coordinating Atlas backup/availability settings.
+- The Render Blueprint currently selects the Free compute plan for a public demo. Free web services sleep after 15 minutes without inbound traffic and may take about a minute to wake; Render documents this tier for hobby projects and previews, not production applications. For an always-on production deployment, switch to a paid plan only when you're ready. The API is configured for one instance; high availability across multiple instances would require adding a durable generation queue and coordinating Atlas backup/availability settings.
